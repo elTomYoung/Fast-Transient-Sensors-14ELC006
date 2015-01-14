@@ -29,7 +29,7 @@ B_axis_singlecoil = bhelical(dc/2,N,coil_length,I,a+(coil_length/2))
 %% Part B
 % Calculate the resultant magnetic field from all 3 coils at the origin.
 % All coils produce the same field strength at the origin
-Br_mag = sqrt(3*(B_axis_singlecoil)^2)
+Br_mag = sqrt(3*((B_axis_singlecoil)^2))
 % Angle between the resultant vector and each axis
 Br_angle = acosd(-B_axis_singlecoil/Br_mag)
 
@@ -46,10 +46,10 @@ Br_angle_c3 = acosd(B_axis_singlecoil/Br_mag)
 %% Part D
 % Draw magnetic field along axis of coil.
 hold on
-z_point = (0:coil_length/1000:(coil_length/2)+a);
+z_point = (0:coil_length/1000:coil_length);
 Br = bhelical(dc/2,N,coil_length,I,z_point);
 plot(z_point,Br*1000,'r')
 title('Magnetic Flux Density Along Coil Axis')
-xlabel('x')
+xlabel('x (m)')
 ylabel('Magnetic Flux ensity (mT)')
 hold off

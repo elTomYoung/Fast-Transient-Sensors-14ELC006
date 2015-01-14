@@ -26,4 +26,4 @@ E = V/d
 %% Part D
 % Estimate capacitance of capacitor using provided formula.
 s_area = pi*(D/2)^2;
-C = e_r*(s_area/d)
+C = e_r*(8.854*10^-12)*(s_area/d)

@@ -20,9 +20,9 @@ alpha = 45;
 S = H2-H1;
 
 %% Section A - Large Rectangle
-w = H1 + H2;
+w = 2*H2;
 l = L + beta;
-L_lg_rect = indparplates(L+beta,d,H1+H2);
+L_lg_rect = indparplates(L+beta,d,w);
 
 %% Section B - Variable Width
 s_tri_base = ((H2-H1)/2)*tand(45);
@@ -35,15 +35,20 @@ L_sm_rect = indparplates(delta,d,H1);
 L_coil = indscoil(D2/2,H1);
 
 %% Coil Mutual
-N_outer = 10;
-N_inner = N_outer;
+N = 1000;
 % Pre-allocate mindK
-mindk = zeros(1,N_outer);
-for k_loop = 0:1:N_outer-1
-   j_loop = 0:1:N_inner-1;
-   Dkj = H1-(k_loop.*(H1./N_outer))+S+(j_loop.*(H1./N_inner));
+mindk = zeros(1,N);
+for k_loop = 0:1:N-1
+   j_loop = 0:1:N-1;
+   Dkj = H1-(k_loop.*(H1./N))+S+(j_loop.*(H1./N));
    mindk(k_loop+1) = sum(mindcoil(D2/2,D2/2,Dkj));
 end
-tmcoil = sum(mindk);
+% for k_loop = 0:1:N-1
+%     for j_loop = 0:1:N-1
+%     Dkj = H1-(k_loop.*(H1./N))+S+(j_loop.*(H1./N));
+%     
+%     end
+% end
+tmcoil = sum(mindk)
 %% Total Self Inductance
 L_total = L_lg_rect+(2*L_var_rect)+(2*L_sm_rect)+(2*L_coil)+tmcoil

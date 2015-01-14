@@ -29,17 +29,17 @@ Br_opp = B1 - B2
 
 %% Part B 
 % Calculate the magnetic field at point x along the axis of coil 1
-Br = bloop(R1,I1,0,x);
+Br = bloop(R1,I1,0,x)
 % Mutual indctance estimation
-area_c1 = pi*(R2^2);
-M21_est = ((N2^2)/I1)*(Br*area_c1)
+area_c2 = pi*(R2^2);
+M21_est = ((N2^2)/I1)*(Br*area_c2)
 
 %% Part C
 % Calculate magnetic flux Coil1 -> Coil2
 B_c1 = bloop(R1,I1,R2,x)
 
 %% Part D
-% Calculate magnetic flux Coil1 -> Coil2
+% Calculate magnetic flux Coil2 -> Coil1
 B_c2 = bloop(R2,I2,R1,x)
 
 %% Part E
