@@ -6,7 +6,7 @@ function [ rhelical ] = rhelical( coil_height, wire_thickness, pitch, resistivit
 
     if length(varargin) == 1 
         length_pre = coil_height./pitch;
-        length_coil = length_pre.*sqrt((2.*pi.*wire_thickness).^2 + pitch.^2);
+        length_coil = length_pre.*sqrt((2.*pi.*varargin{1}/2).^2 + pitch.^2);
     else
         r1 = varargin{0};
         r2 = varargin{1};
@@ -18,7 +18,7 @@ function [ rhelical ] = rhelical( coil_height, wire_thickness, pitch, resistivit
         length_pre = pi./(pitch.*tan(alpha));
         length_coil = length_pre.*((a.*r2)-(b.*r1)+c.*log((a.*r2)./(b.*r1)));
     end
-    rhelical = rwire(resistivity,length_coil,wire_thickness);
+    rhelical = rwire(resistivity,length_coil,wire_thickness/2);
 
 end
 

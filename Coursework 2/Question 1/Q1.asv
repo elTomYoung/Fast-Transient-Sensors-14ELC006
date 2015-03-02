@@ -34,12 +34,12 @@ alpha = atan((b-a)/Lc);
 %       First section
 R1cf = critf(rho,a);
 %       Conical section
-N = 10;
-c_step = Lc/N;
+N = 1000;
+Lc_step = Lc/N;
 for n = 1:1:N
-   h(n) = c_step*n.*tan(alpha)+a;
+   h(n) = Lc_step*n.*tan(alpha)+a;
    RCcf(n) = critf(rho,h(n));   
-   RCdc(n) = rwire(rho,c_step,h(n));
+   RCdc(n) = rwire(rho,Lc_step,h(n));
 end
 %       End Section
 R2cf = critf(rho,b);
@@ -51,7 +51,9 @@ for ln = 1:1:50;
     %   First Section
     if Freq(ln) >= R1cf 
         delta = dskin(rho,Freq(ln));
-        RF = R1.*(h(n)./(2.*delta));
+        Sskin = 2.*a.*pi.*delta.*(1-(delta./(2.*a)));
+        RF = La./Sskin;
+        %RF = R1.*(a./(2.*delta));
     else
         RF = R1;
     end
@@ -59,15 +61,17 @@ for ln = 1:1:50;
     for n = 1:1:N
         if Freq(ln) >= RCcf(n) 
            delta = dskin(rho,Freq(ln));
-           RC = RC + RCdc.*(h(n)./(2.*delta));
+           RC(n) = RCdc(n).*(h(n)./(2.*delta));
         else
-           RC = RCdc; 
+           RC(n) = RCdc(n); 
         end
     end
     %   End Section
-    if Freq >= R2cf 
+    if Freq(ln) >= R2cf 
         delta = dskin(rho,Freq(ln));
-        RE = R2.*(h(n)./(2.*delta));
+        Sskin = 2.*a.*pi.*delta.*(1-(delta./(2.*a)));
+        RE = Lc./Sskin;
+        %RE = R2.*(b./(2.*delta));
     else
         RE = R2;
     end
@@ -76,8 +80,9 @@ for ln = 1:1:50;
 end
 
 % Plot data
-loglog(Freq,RFreq./DCResis,'-',)
+loglog(Freq,RFreq./DCResis,'b','linewidth',2)
 grid on
 xlabel('Frequency')
-ylabel('f(f,R)/f(0,0)')
+ylabel('Ratio of ressitance at frequency to DC resistance. f(f,R) / f(0,0)')
+xlim([0 1*10^9])
 title('Resistance change with Frequency')
