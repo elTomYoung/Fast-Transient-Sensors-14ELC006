@@ -17,12 +17,14 @@ a = d/2; %radius mm
 
 %% Part A
 % Caculate the DC resistance
-DCResis = rhelical(L,d,p,rho,D)
+[DCResis, Coil_length] = rhelical(L,d,p,rho,D);
 
 %% Part B
 % Estimate the resistance at 1MHz
 delta = dskin(rho,1*10^6);
-RFreq = DCResis.*((a./(2*delta)).*(1+((2.*(a^2))./(p^2))))
+Sskin = 2.*a.*pi.*delta.*(1-(delta./(2.*a)));
+Rskin = (Coil_length.*rho)./Sskin;
+RFreq = DCResis.*Rskin.*proxyim(a,p)
 
 %% Part C
 % Draw a graphical representation of the resistance variation with 
@@ -34,17 +36,20 @@ Freq = logspace(0,7);
 for ln = 1:1:50;
     if Freq(ln) >= Rcf 
         delta = dskin(rho,Freq(ln));
-        RT(ln) = DCResis.*((a./(2*delta)).*(1+((2.*(a^2))./(p^2))));
+        Sskin = 2.*a.*pi.*delta.*(1-(delta./(2.*a)));
+        Rskin = (Coil_length.*rho)./Sskin;
+        RT(ln) = DCResis.*Rskin.*proxyim(a,p);
     else
         RT(ln) = DCResis;
     end
 end
 % Plot data
-loglog(Freq,RT./DCResis,'b','linewidth',2)
+semilogx(Freq,RT./DCResis,'b','linewidth',2)
 grid on
 xlabel('Frequency')
-ylabel('Ratio of ressitance at frequency to DC resistance. f(f,R) / f(0,0)')
-xlim([0 1*10^9])
+ylabel('$${F(f,R)\over F(0,0) }$$','Interpreter','Latex')
+xlim([0 10*10^6])
+ylim([1 inf])
 title('Resistance change with Frequency')
 
 %% Part D

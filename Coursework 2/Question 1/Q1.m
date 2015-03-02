@@ -85,6 +85,6 @@ end
 loglog(Freq,RFreq./DCResis,'b','linewidth',2)
 grid on
 xlabel('Frequency')
-ylabel('Ratio of ressitance at frequency to DC resistance. f(f,R) / f(0,0)')
+ylabel('$${F(f,R)\over F(0,0) }$$','Interpreter','Latex')
 xlim([0 1*10^9])
 title('Resistance change with Frequency')
