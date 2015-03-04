@@ -18,6 +18,7 @@ a = d/2; %radius mm
 %% Part A
 % Caculate the DC resistance
 [DCResis, Coil_length] = rhelical(L,d,p,rho,D);
+DCResis
 
 %% Part B
 % Estimate the resistance at 1MHz
@@ -45,6 +46,7 @@ for ln = 1:1:50;
 end
 % Plot data
 semilogx(Freq,RT./DCResis,'b','linewidth',2)
+%semilogx(Freq,RT,'b','linewidth',2)
 grid on
 xlabel('Frequency')
 ylabel('$${F(f,R)\over F(0,0) }$$','Interpreter','Latex')

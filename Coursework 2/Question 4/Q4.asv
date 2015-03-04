@@ -21,12 +21,9 @@ tm1 = 250*10^-9;
 %% Part C
 % From the equations given make an accurate calculation of R and L.
 % F(gamma) = CV0*f(gamma)*g(gamma)
-gamma = -100:0.01:100;
-F = C.*V0.*f(gamma).*g(gamma)-(tm1*Im1);
+gamma = -100:0.1:100;
+F = C.*V0.*f(gamma).*g(gamma);
 
 % Plot
 plot(gamma,F,'linewidth',2)
 grid on
-xlabel('\gamma')
-ylabel('F(\gamma)')
-title('Graph of F(\gamma) for \gamma =-100:100')
