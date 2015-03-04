@@ -30,3 +30,14 @@ grid on
 xlabel('\gamma')
 ylabel('F(\gamma)')
 title('Graph of F(\gamma) for \gamma =-100:100')
+% From datapoint method at F(gamma) = 0, gamma = 0.3421
+gamma = 0.3421;
+% Calculate L using Im1 equation and R using gamma equation.
+L = (V0.*sqrt(C).*g(gamma)).^2
+R = 2.*gamma.*sqrt(C./L)
+% Gives values of;
+%   L = 36.98 H
+%   R = 3.56*10^-5 Ohm / 35.6 uOhm
+
+%% Part D
+%  
