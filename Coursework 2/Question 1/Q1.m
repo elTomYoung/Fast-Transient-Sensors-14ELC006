@@ -44,9 +44,11 @@ end
 %       End Section
 R2cf = critf(rho,b);
 % Loop to calculate resistance with frequency
-RFreq=zeros(50);
-Freq = logspace(0,9);
-for ln = 1:1:50;
+% Number of loops
+count = 100;
+RFreq=zeros(count);
+Freq = logspace(0,9,count);
+for ln = 1:1:count;
     RC = 0;
     %   First Section
     if Freq(ln) >= R1cf 

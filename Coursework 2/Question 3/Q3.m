@@ -16,5 +16,3 @@ Evan_rho = 1.38*10^-8;  %Ohm-meter
 % Design a 51 Ohm pass-through resistor
 Max_Radius = dskin(Evan_rho,1*10^9)
 length_max_radius = (pi.*(Max_Radius^2).*R)./Evan_rho % Over 30mm
-
-[DCResis CLength] = rhelical(AxL,0.01,0.012,Evan_rho,0.01)
