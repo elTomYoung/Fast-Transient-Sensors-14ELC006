@@ -48,13 +48,14 @@ title('Discharge Current for 30kV V_{0}')
 % Find Im2 and Tz
 Im2 = min(Im);
 Tzidx = find(Im == min(Im));
-Tz = t(Tzidx);
+T2 = t(Tzidx);
+Tz = T2-tm1;
 T = 2*Tz;
 Lest = (T^2)./(4.*(pi^2).*C)
 Rest = (-2./pi).*(sqrt(Lest./C)).*(log(abs(Im2)./Im1))
 
-Lerr1 = ((Lest-L)/L)*100
-Rerr1 = ((Rest-R)/R)*100
+Lerr1 = (abs((Lest-L)/L))*100
+Rerr1 = (abs((Rest-R)/R))*100
 
 %% Part E 
 % Repeat C and D from the following conditions.
@@ -86,9 +87,9 @@ t = 0:1*10^-10:0.6*10^-4;
 Im = (V0./(omega.*L)).*sin(omega.*t).*exp(-(R/(2*L)).*t);
 tm = (sqrt(L.*C)).*((1./sqrt(1-(gamma.^2))).*asin(sqrt(1-(gamma.^2))));
 figure
-plot(t.*10^3,Im./(1*10^3),'Linewidth',2)
+plot(t.*10^6,Im./(1*10^3),'Linewidth',2)
 grid on
-xlabel('Time(ms)')
+xlabel('Time(\mus)')
 ylabel('I(kA)')
 title('Discharge Current for 27kV V_{0}')
 % Find Im2 and Tz
@@ -96,12 +97,13 @@ title('Discharge Current for 27kV V_{0}')
 Im2 = min(Im);
 Tzidx = find(Im == Im2);
 Tz = t(Tzidx);
+Tz = T2-tm1;
 T = 2*Tz;
 Lest = (T^2)./(4.*(pi^2).*C)
 Rest = (-2./pi).*(sqrt(Lest./C)).*(log(abs(Im2)./Im1))
 
-Lerr2 = ((Lest-L)/L)*100
-Rerr2 = ((Rest-R)/R)*100
+Lerr2 = (abs((Lest-L)/L))*100
+Rerr2 = (abs((Rest-R)/R))*100
 
 %% Part F
 % Written

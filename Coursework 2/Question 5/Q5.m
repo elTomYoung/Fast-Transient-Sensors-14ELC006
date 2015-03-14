@@ -68,6 +68,8 @@ V1b = V1a*Pl1;
 V1c = V1b*Pl1;
 V1d = V1c*Pl1;
 V1 = [V1a, V1b, V1c, V1d];
+V1vals = strtrim(cellstr(num2str(V1(:),'%.2fV')));
+
 
 % ii)
 Pl2 = (Zl2-Z0)/(Zl2+Z0);
@@ -76,6 +78,7 @@ V2b = V2a*Pl2;
 V2c = V2b*Pl2;
 V2d = V2c*Pl2;
 V2 = [V2a, V2b, V2c, V2d];
+V2vals = strtrim(cellstr(num2str(V2(:),'%.2fV')));
 
 % iii)
 P3 = (Zl3-Z0)/(Zl3+Z0);
@@ -84,12 +87,14 @@ V3b = V3a*P3;
 V3c = V3b*P3;
 V3d = V3c*P3;
 V3 = [V3a, V3b, V3c, V3d];
+V3vals = strtrim(cellstr(num2str(V3(:),'%.2fV')));
 
 % Plot graph
 figure
 % i)
 subplot(3,1,1)
 bar(delta,V1)
+text(delta,V1,V1vals,'VerticalAlignment','baseline');
 title('Z_{l} = 50\Omega')
 ylabel('Volts (V)')
 xlabel('Time (\delta)')
@@ -98,6 +103,7 @@ grid on
 % ii)
 subplot(3,1,2)
 bar(delta,V2)
+text(delta,V2,V2vals,'VerticalAlignment','baseline');
 title('Z_{l} = 20\Omega')
 ylabel('Volts (V)')
 xlabel('Time (\delta)')
@@ -106,6 +112,7 @@ grid on
 % iii)
 subplot(3,1,3)
 bar(delta,V3)
+text(delta,V3,V3vals,'VerticalAlignment','baseline');
 title('Z_{l} = 75\Omega')
 ylabel('Volts (V)')
 xlabel('Time (\delta)')
