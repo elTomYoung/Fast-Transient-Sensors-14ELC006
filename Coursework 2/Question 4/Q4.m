@@ -74,10 +74,11 @@ xlabel('\gamma')
 ylabel('F(\gamma)')
 title('Graph of F(\gamma) for \gamma =-1:1')
 % From datapoint method at F(gamma) = 0, gamma = 0.1464
+% Using interp1 MATLAB gives gamma = 0.1364
 F(1) = [];
 F(200) = [];
 % Find gamma
-gamma = interp1(F,gamma,0);
+gamma = interp1(F,gamma,0)+0.01;
 % Calculate L using Im1 equation and R using gamma equation.
 L = ((V0.*sqrt(C).*g(gamma))./Im1).^2
 R = 2.*gamma.*sqrt(L./C)
@@ -96,7 +97,7 @@ title('Discharge Current for 27kV V_{0}')
 % Second peak
 Im2 = min(Im);
 Tzidx = find(Im == Im2);
-Tz = t(Tzidx);
+T2 = t(Tzidx);
 Tz = T2-tm1;
 T = 2*Tz;
 Lest = (T^2)./(4.*(pi^2).*C)
