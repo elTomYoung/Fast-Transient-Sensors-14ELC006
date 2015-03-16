@@ -7,9 +7,13 @@ clc
 
 %% Constants
 % Using 1&9 give constants as O-O 
-d = 0.14*10^-3; %mm
+% d = 0.14*10^-3; %mm
+% D = 4*10^-2;    %cm
+% L = 10*10^-2;  %cm
+% p = 0.8*10^-3;  %mm
+d = 0.25*10^-3; %mm
 D = 4*10^-2;    %cm
-L = 10*10^-2;  %cm
+L = 9.5*10^-2;  %cm
 p = 0.8*10^-3;  %mm
 rho = 1.72*10^-8;  %Ohm-Meter
 a = d/2; %radius mm

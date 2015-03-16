@@ -66,18 +66,16 @@ RTotal = RSparkGap.*Ns;
 CTotal = CMarx./Ns;
 Beta1 = 1./(RTotal.*CLoad);
 Beta2 = 1./(RLoad.*CTotal);
-t=0:1*10^-10:5*10^-7;
+t=0:1*10^-10:1*10^-8;
 VLoad=(VMax/((Beta1-Beta2)*RTotal*CLoad))*(exp(-Beta2*(t))-exp(-Beta1*(t)));
-rt = risetime(VLoad)./10;
 % Plot
-plot(t*10^9,VLoad./10^3)
+plot(t,VLoad./10^3)
 grid on
-str = sprintf('Marx Generator Output Voltage for N_{s} = %d and T_{RISE} = %.2fns',Ns,rt);
-title(str);
+title('Marx Generator Output Pulse');
 ylabel('V (kV)');
 xlabel('Time (ns)');
 VMaxPeak = max(VLoad);
-
+rt = risetime(VLoad);
 % Increase stages if necessary
 while VMaxPeak<VPeak
     % Add stage
@@ -98,10 +96,11 @@ while VMaxPeak<VPeak
     VLoad=(VMax/((Beta1-Beta2)*RTotal*CLoad))*(exp(-Beta2*(t))-exp(-Beta1*(t)));
     VMaxPeak = max(VLoad);
     rt = risetime(VLoad)./10; %rise time in ns
-end 
+end
+% 
 % Plot final result
 figure
-plot(t.*10^9,VLoad./10^3)
+plot(t.*10^8,VLoad./10^3)
 grid on
 str = sprintf('Marx Generator Output Voltage for N_{s} = %d and T_{RISE} = %.2fns',Ns,rt);
 title(str);
