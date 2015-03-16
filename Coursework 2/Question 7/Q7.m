@@ -41,13 +41,16 @@ VLoss = (CStray/(CGap+CStray));
 VLossPerCent = 100-(VLoss*100)
 
 %% Stages
-VStage = CMarxCharge*VLoss
-VMax = 0;
-Ns = 1;
-while VStage < VPeak
-    VStage = VStage+(CMarxCharge*VLoss);
+VPrevStage = CMarxCharge;
+VCStage = 0;
+VTotal = 0;
+Ns = 0;
+while VTotal < VPeak
+    VCStage = VPrevStage*VLoss;
+    VTotal = VCStage+VTotal
+    VPrevStage = VCStage;
     Ns = Ns + 1;
-end
+end %12
 
 %% Charge Current, feed forward, power
 
