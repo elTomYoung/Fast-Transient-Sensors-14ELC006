@@ -1,4 +1,4 @@
-function [ ctrans ] = ctrans( distance_between_wires, radius, varargin )
+function [ ctrans ] = ctrans( outer_radius, inner_radius, varargin )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
     %% Constants
@@ -11,6 +11,6 @@ function [ ctrans ] = ctrans( distance_between_wires, radius, varargin )
         d2 = [varargin{4}];
         ctrans = (e_r*e_0*area)/(e_0*d1+e_r*d2);
     else
-        ctrans = (pi*e_0)/log(distance_between_wires/radius);
+        ctrans = (2*pi*e_0)/log(outer_radius/inner_radius);
     end
 end

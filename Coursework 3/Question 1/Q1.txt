@@ -1,0 +1,19 @@
+Load Voltage Characteristics
+Peak Voltage = 492.55kV
+Rise Time = 98.44ns
+Bandwidth = 3.56MHz
+
+Voltage Sensor
+For 2 percent accuracy, requires ratio of 5:1 giving;
+Rise Time = 19.69ns
+Bandwidth = 17.78MHz
+
+Low Voltage Arm
+Chosen design is a coaxial cable with;
+Z1 = 50, Z2 = 50, Z = 25
+T_{lv} = 0
+
+High Voltage Arm
+Using the attenuation factor with a z of 50.00 Ohms gives
+ a high voltage arm resistor value of 307.79 kOhms
+with a height of 98.51cm.
