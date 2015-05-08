@@ -84,7 +84,7 @@ title(['Magnetic flux for an ', damping_string ,' RLC Circuit'])
 Rrt = RCoil_resistance + Rcvr;
 Lr = RCoil_inductance;
 rogowski_current = @(x,Rrt,Lr,Cb,Lb,Rb,Vo) exp((Rrt./Lr).*x).*(k.*(Vo./((1./sqrt(Lb.*Cb)).*Lb).*(((1./sqrt(Lb.*Cb)).*exp((-1.*(Rb./(2.*Lb)).*x)).*cos((1./sqrt(Lb.*Cb)).*x))+((-1.*(Rb./(2.*Lb))).*exp((-1.*(Rb./(2.*Lb)).*x)).*sin((1./sqrt(Lb.*Cb)).*x)))));
-RIntegral = integral(@(x)rogowski_current(x,Rrt,Lr,Cb,Lb,Rb,Vo),0,50*10^-11);
+RIntegral = integral(@(x)rogowski_current(x,Rrt,Lr,Cb,Lb,Rb,Vo),0,15*10^-11);
 t2 = 0:1*10^-10:10*10^-9;
 Rogowski_Current = (exp(-(Rrt./Lr).*t2)./Lr).*RIntegral;
 dRogowski_Current_prefix = (exp(-(Rrt./Lr).*t2)./Lr).*exp((Rrt./Lr).*t2).*dflux(1:length(t2));
@@ -99,3 +99,6 @@ ylabel('V_{R} (V)')
 title('Rogowski Coil Voltage')
 legend('R_{R}I_{R}','L_{R}dI_{R}/dt')
 hold off
+
+%%
+t3 = 0:1*10^-10:10

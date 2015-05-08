@@ -13,7 +13,7 @@ e0 = 8.85*10^-12; % F/m
 %Wire constants
 evan_rho = 1.38*10^-6; %Ohm/m
 evan_heat = 435; %J/kg/K
-evan_dens = 8.1*10^6; %kg/m^3;
+evan_dens = 8.1*10^3; %kg/m^3;
 %Generator Constants
 Ns = 20;
 CStage = 40*10^-9;
@@ -77,11 +77,9 @@ ylabel('V (kV)');
 xlabel('Time (\mus)');
 find(VLoad == 0)
 %Energy
-tmax = 58*10^-6;
-Vpeak = max(VLoad)^2;
-Q = (tmax*Vpeak)/(2*Zhv);
+Q = ((58*10^-6).*(max(VLoad)^2))./(2.*Zhv);
 %Wire Mass
-wire_vol = (pi*(wire_radius^2))*twirelength; %m^3
+wire_vol = (pi*(wire_radius^2))*wirel; %m^3
 wire_mass = wire_vol*evan_dens; %kg
 %Temperature
 deltaT = Q./(evan_heat.*wire_mass)

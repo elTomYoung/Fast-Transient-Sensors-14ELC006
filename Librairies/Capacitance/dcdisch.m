@@ -3,7 +3,8 @@ function [ cdisch, dcdisch, damping_string] = dcdisch( initial_voltage, bank_ind
 %   Detailed explanation goes here
     %% Constants
     damping = 2.*sqrt(bank_inductance./bank_capacitance);
-    omega = 1./sqrt(bank_inductance.*bank_capacitance);
+    gamma = 0.5.*bank_resistance.*sqrt(bank_capacitance./bank_inductance);
+    omega = (1./sqrt(bank_inductance.*bank_capacitance)).*sqrt(1-(gamma^2));
     exp_component = -1.*(bank_resistance./(2.*bank_inductance)).*time;
     %% Equations
     if bank_resistance < damping
