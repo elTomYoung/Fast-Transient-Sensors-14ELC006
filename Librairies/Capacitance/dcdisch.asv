@@ -3,10 +3,9 @@ function [ cdisch, dcdisch, damping_string] = dcdisch( initial_voltage, bank_ind
 %   Detailed explanation goes here
     %% Constants
     damping = 2.*sqrt(bank_inductance./bank_capacitance);
-%     gamma = 0.5.*bank_resistance.*sqrt(bank_capacitance./bank_inductance);
-    omega = sqrt((1./(bank_inductance.*bank_capacitance))-((bank_resistance./(2.*bank_inductance))^2));
-    omegadot = sqrt(((bank_resistance./(2.*bank_inductance))^2))-(1./(bank_inductance.*bank_capacitance));
-%     omega = (1./sqrt(bank_inductance.*bank_capacitance)).*sqrt(1-(gamma^2));
+    gamma = 0.5.*bank_resistance.*sqrt(bank_capacitance./bank_inductance);
+    
+    omega = (1./sqrt(bank_inductance.*bank_capacitance)).*sqrt(1-(gamma^2));
     exp_component = -1.*(bank_resistance./(2.*bank_inductance)).*time;
     %% Equations
     if bank_resistance < damping
@@ -23,9 +22,9 @@ function [ cdisch, dcdisch, damping_string] = dcdisch( initial_voltage, bank_ind
         damping_string = 'Critcally Damped';
     end
     if bank_resistance > damping
-        cdisch_prefix = initial_voltage./((2.*omegadot).*bank_inductance);
-        cdisch = cdisch_prefix.*exp(exp_component).*(exp(omegadot.*time)-exp(-omegadot.*time));
-        dcdisch = cdisch_prefix.*((exp(exp_component).*(omegadot.*exp(omegadot.*time)+omegadot.*exp(-omegadot.*time)))+(-1.*(bank_resistance./(2.*bank_inductance)).*exp(exp_component).*(exp(omegadot.*time)-exp(-omegadot.*time))));
+        cdisch_prefix = initial_voltage./((2.*omega).*bank_inductance);
+        cdisch = cdisch_prefix.*exp(exp_component).*(exp(omega.*time)-exp(-omega.*time));
+        dcdisch = cdisch_prefix.*((exp(exp_component).*(omega.*exp(omega.*time)+omega.*exp(-omega.*time)))+(-1.*(bank_resistance./(2.*bank_inductance)).*exp(exp_component).*(exp(omega.*time)-exp(-omega.*time))));
         damping_string = 'Over Damped';
     end
 end

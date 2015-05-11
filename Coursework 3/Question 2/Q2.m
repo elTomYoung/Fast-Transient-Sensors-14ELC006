@@ -36,7 +36,7 @@ title(['Differential Current Discharge for an ', damping_string ,' RLC Circuit']
 
 %% Probe Design
 %Coil Parameters
-major_radius = 6*10^-3;
+major_radius = 20*10^-3;
 minor_radius = 2*10^-3;
 wire_radius = 1*10^-3;
 wire_diameter = 2*wire_radius;
@@ -83,8 +83,9 @@ title(['Magnetic flux for an ', damping_string ,' RLC Circuit'])
 %% Rogowski Coil Current
 Rrt = RCoil_resistance + Rcvr;
 Lr = RCoil_inductance;
-rogowski_current = @(x,Rrt,Lr,Cb,Lb,Rb,Vo) exp((Rrt./Lr).*x).*(k.*(Vo./((1./sqrt(Lb.*Cb)).*Lb).*(((1./sqrt(Lb.*Cb)).*exp((-1.*(Rb./(2.*Lb)).*x)).*cos((1./sqrt(Lb.*Cb)).*x))+((-1.*(Rb./(2.*Lb))).*exp((-1.*(Rb./(2.*Lb)).*x)).*sin((1./sqrt(Lb.*Cb)).*x)))));
-RIntegral = integral(@(x)rogowski_current(x,Rrt,Lr,Cb,Lb,Rb,Vo),0,50*10^-11);
+omega = sqrt((1./(Lb.*Cb))-((Rb./(2.*Lb))^2));
+rogowski_current = @(x) exp((Rb./(2.*Lb)).*x).*(k.*(Vo./(omega.*Lb).*((omega.*exp(-1.*(Rb./(2.*Lb)).*x).*cos(omega.*x))+((-1.*(Rb./(2.*Lb))).*exp(-1.*(Rb./(2.*Lb)).*x).*sin(omega.*x)))));
+RIntegral = integral(@(x)rogowski_current(x),0,70*10^-11);
 t2 = 0:1*10^-10:10*10^-9;
 Rogowski_Current = (exp(-(Rrt./Lr).*t2)./Lr).*RIntegral;
 dRogowski_Current_prefix = (exp(-(Rrt./Lr).*t2)./Lr).*exp((Rrt./Lr).*t2).*dflux(1:length(t2));
@@ -92,7 +93,7 @@ dRogowski_Current = dRogowski_Current_prefix + (RIntegral.*((-Rrt./Lr).*exp(-(Rr
 figure('name','Rogowski Coil Voltage')
 hold on
 plot(t2.*10^9,Rogowski_Current.*Rrt,'b','Linewidth',2)
-plot(t2.*10^9,dRogowski_Current.*Lr,'r','Linewidth',2)
+% % plot(t2.*10^9,dRogowski_Current.*Lr,'r','Linewidth',2)
 grid on
 xlabel('Time (ns)')
 ylabel('V_{R} (V)')
