@@ -101,16 +101,26 @@ title('Rogowski Coil Voltage')
 legend('R_{R}I_{R}','L_{R}dI_{R}/dt')
 hold off
 
-%% Oscilloscope Voltage
-Ri = 5;
-Ci = 20*10^-9;
-tau = Ri.*Ci;
-extau = 100*10^-9;
-prefix = 1./tau;
-% Vout = prefix.*integral(@(x)Rogowski_Current.*Rrt,0,100*10^-9);
-Vosc = 0;
-figure('name','Rogowski Coil Voltage')
-hold on
-plot(t2.*10^9,Vosc,'b','Linewidth',2)
+%% Input Voltage
+%Differential Magnetic Flux
+Vin = k.*Diff_Current_Discharge;
+figure('name','Input Voltage')
+plot(t.*10^6,Vin,'Linewidth',2)
 grid on
+xlabel('Time (\mus)')
+ylabel('Voltage (V)')
+title('Rogowski Coil Output Voltage')
+%% Oscilloscope Voltage
 % Integrator Design
+Ri = 50*10^-3;
+Ci = 450*10^-9;
+tau = Ri.*Ci;
+Vosc = (Rogowski_Current.*k)./tau;
+figure('name','Rogowski Coil Voltage')
+plot(t2.*10^9,Vosc,'b','Linewidth',2)
+Voutp = max(Vosc);
+grid on
+xlabel('Time (ns)')
+ylabel('Voltage (V)')
+str = sprintf('Integrator Circuit Output Voltage with peak: %.1fV',Voutp);
+title(str)

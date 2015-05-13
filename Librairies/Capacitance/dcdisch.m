@@ -5,7 +5,9 @@ function [ cdisch, dcdisch, damping_string] = dcdisch( initial_voltage, bank_ind
     damping = 2.*sqrt(bank_inductance./bank_capacitance);
 %     gamma = 0.5.*bank_resistance.*sqrt(bank_capacitance./bank_inductance);
     omega = sqrt((1./(bank_inductance.*bank_capacitance))-((bank_resistance./(2.*bank_inductance))^2));
-    omegadot = sqrt(((bank_resistance./(2.*bank_inductance))^2))-(1./(bank_inductance.*bank_capacitance));
+    omegadot1 = (bank_resistance./(2*bank_inductance))^2;
+    omegadot2 = 1./(bank_inductance*bank_capacitance);
+    omegadot = sqrt(omegadot1-omegadot2);
 %     omega = (1./sqrt(bank_inductance.*bank_capacitance)).*sqrt(1-(gamma^2));
     exp_component = -1.*(bank_resistance./(2.*bank_inductance)).*time;
     %% Equations
