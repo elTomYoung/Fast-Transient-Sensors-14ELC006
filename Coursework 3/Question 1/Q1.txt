@@ -15,5 +15,9 @@ T_{lv} = 0
 
 High Voltage Arm
 Using the attenuation factor with a z of 50.00 Ohms gives
- a high voltage arm resistor value of 307.79 kOhms
+ a high voltage arm resistor value of 308 kOhms
 with a height of 98.51cm.
+For a wire radius of 12microm and a madrel radius of 5.00cm, 
+404m of wire is required. This gives a total turns of 642.349551.
+Under the discharge from the Marx generator the temeprature
+increase in the wire is 79.64degrees

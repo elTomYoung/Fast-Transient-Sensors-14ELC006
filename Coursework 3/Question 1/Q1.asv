@@ -88,11 +88,8 @@ p = wire_radius + 8*10^-6;
 cable_outer_radius = p + 5*10^-6;
 bar_radius = 5*10^-6;
 Nbars = 10;
-indHVCoax = indhvcoax(cable_outer_radius,bar_radius,wire_radius,p,Nbars).*hvleadlength;
-indHV = indhelical(Nt,rmandrel,ColumnHeight);
-indTotal = indHV+indHVCoax;
-%Transfer functiona and response time
-
+indHCCoax = indhvcoax(cable_outer_radius,bar_radius,wire_radius,p,Nbars).*hvleadlength;
+ind
 %% Print to file
 fileID = fopen('Q1.txt','w');
 fprintf(fileID,'Load Voltage Characteristics\r\n');

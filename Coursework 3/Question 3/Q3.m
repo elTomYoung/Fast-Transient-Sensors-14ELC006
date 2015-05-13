@@ -1,9 +1,10 @@
-%% Fast Tansient Sensors - Q3 - Coursework 3
+%% Fast Tansient Sensors - Q2 - Coursework 3
 % B126949 - Tom Young
 
 %% Pre - Cursor
 clear all
 clc
+syms x
 
 %% Constants
 %Global constants
@@ -15,7 +16,7 @@ Rb = 50;
 Lb = 25*10^-9;
 Vo = 60*10^3;
 %Rod Diameter
-Rd = 5*10^-3;
+Rd = 10*10^-3;
 
 %% Current Discharge
 t = 0:1*10^-10:25*10^-6;
@@ -24,30 +25,41 @@ figure('name','RLC Current Discharge')
 plot(t.*10^6,Current_Discharge.*10^-3,'Linewidth',2)
 grid on
 xlabel('Time (\mus)')
-ylabel('Voltage (kV)')
+ylabel('Current (kA)')
 title(['Current Discharge for an ', damping_string ,' RLC Circuit'])
 figure('name','RLC Differential Current Discharge')
 plot(t.*10^6,Diff_Current_Discharge.*10^-9,'Linewidth',2)
 grid on
 xlabel('Time (\mus)')
-ylabel('Voltage/Time (GV/s)')
+ylabel('Current/Time (GA/s)')
 title(['Differential Current Discharge for an ', damping_string ,' RLC Circuit'])
 
 %% Probe Design
 %Coil Parameters
-major_radius = 5*10^-3;
-minor_radius = 0.5*10^-3;
-wire_diameter = 2*minor_radius;
-N = 5; %5-10 turns
+major_radius = 20*10^-3;
+minor_radius = 3*10^-3;
+wire_radius = 1*10^-3;
+wire_diameter = 2*wire_radius;
+N = 30; %10's turns
 copper_rho = 1.7*10^-8;
 %Current Viewing Resistor
 Rcvr = 50; %Matches cable impedence
-%Resistance
-coil_length_est = pi*major_radius*2*N;
-coil_area = pi*minor_radius^2;
-RCoil_resistance = copper_rho.*(coil_length_est./coil_area);
+%Pitch
+p = (2.*pi.*major_radius)./N;
 %Inductance
-RCoil_inductance = indhelical(N,major_radius,coil_length_est);
+Induct_pre = u0.*minor_radius.*N;
+Induct_sum0 = 0.0007*((log((2*pi*major_radius)/p))^0);
+Induct_sum1 = 0.1773*((log((2*pi*major_radius)/p))^1);
+Induct_sum2 = -0.0322*((log((2*pi*major_radius)/p))^2);
+Induct_sum3 = 0.00197*((log((2*pi*major_radius)/p))^3);
+Induct_sum = Induct_sum0 + Induct_sum1 + Induct_sum2 + Induct_sum3;
+Induct_pre2 = (((pi*minor_radius)/p)+(log((2*p)/(wire_diameter)))-(5/4)-Induct_sum);
+RCoil_inductance = Induct_pre*Induct_pre2;
+%Resistance
+freq = 1/(2*sqrt(Lb*Cb));
+RCoil1 = N/(pi*wire_diameter);
+RCoil2 = sqrt((copper_rho*pi*freq*u0)*((p^2)+((2*pi*minor_radius)^2)));
+RCoil_resistance = RCoil1*RCoil2;
 
 %% Magnetic flux
 %Magnetic flux time rate-of-change
@@ -71,8 +83,9 @@ title(['Magnetic flux for an ', damping_string ,' RLC Circuit'])
 %% Rogowski Coil Current
 Rrt = RCoil_resistance + Rcvr;
 Lr = RCoil_inductance;
-rogowski_current = @(x,Rrt,Lr,Cb,Lb,Rb,Vo) exp((Rrt./Lr).*x).*(k.*(Vo./((1./sqrt(Lb.*Cb)).*Lb).*(((1./sqrt(Lb.*Cb)).*exp((-1.*(Rb./(2.*Lb)).*x)).*cos((1./sqrt(Lb.*Cb)).*x))+((-1.*(Rb./(2.*Lb))).*exp((-1.*(Rb./(2.*Lb)).*x)).*sin((1./sqrt(Lb.*Cb)).*x)))));
-RIntegral = integral(@(x)rogowski_current(x,Rrt,Lr,Cb,Lb,Rb,Vo),0,10*10^-9);
+omega = sqrt((1./(Lb.*Cb))-((Rb./(2.*Lb))^2));
+rogowski_current = @(x) exp((Rb./(2.*Lb)).*x).*(k.*(Vo./(omega.*Lb).*((omega.*exp(-1.*(Rb./(2.*Lb)).*x).*cos(omega.*x))+((-1.*(Rb./(2.*Lb))).*exp(-1.*(Rb./(2.*Lb)).*x).*sin(omega.*x)))));
+RIntegral = integral(@(x)rogowski_current(x),0,70*10^-11);
 t2 = 0:1*10^-10:10*10^-9;
 Rogowski_Current = (exp(-(Rrt./Lr).*t2)./Lr).*RIntegral;
 dRogowski_Current_prefix = (exp(-(Rrt./Lr).*t2)./Lr).*exp((Rrt./Lr).*t2).*dflux(1:length(t2));

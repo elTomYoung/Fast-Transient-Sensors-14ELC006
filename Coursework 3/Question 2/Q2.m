@@ -93,10 +93,24 @@ dRogowski_Current = dRogowski_Current_prefix + (RIntegral.*((-Rrt./Lr).*exp(-(Rr
 figure('name','Rogowski Coil Voltage')
 hold on
 plot(t2.*10^9,Rogowski_Current.*Rrt,'b','Linewidth',2)
-% % plot(t2.*10^9,dRogowski_Current.*Lr,'r','Linewidth',2)
+plot(t2.*10^9,dRogowski_Current.*Lr,'r','Linewidth',2)
 grid on
 xlabel('Time (ns)')
 ylabel('V_{R} (V)')
 title('Rogowski Coil Voltage')
 legend('R_{R}I_{R}','L_{R}dI_{R}/dt')
 hold off
+
+%% Oscilloscope Voltage
+Ri = 5;
+Ci = 20*10^-9;
+tau = Ri.*Ci;
+extau = 100*10^-9;
+prefix = 1./tau;
+% Vout = prefix.*integral(@(x)Rogowski_Current.*Rrt,0,100*10^-9);
+Vosc = 0;
+figure('name','Rogowski Coil Voltage')
+hold on
+plot(t2.*10^9,Vosc,'b','Linewidth',2)
+grid on
+% Integrator Design
