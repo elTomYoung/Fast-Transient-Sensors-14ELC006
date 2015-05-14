@@ -84,18 +84,16 @@ deltaT = Q./(wire_mass.*evan_heat);
 % Capacitance was 16pF with graded column made of aluminium
 cHV = 16*10^-12;
 %Connecting Cable
-hvleadlength = 1;
-p = wire_radius + 8*10^-6;
-cable_outer_radius = p + 5*10^-6;
-bar_radius = 5*10^-6;
-Nbars = 10;
-R = 1;
-indHVCoax = indhvcoax(R,bar_radius,wire_radius,p,Nbars).*hvleadlength
-indHV = indhelical(Nt,rmandrel,ColumnHeight);
-indTotal = indHV+indHVCoax;
+%Chosen wire length of 2m
+width = 1;
+connecting_wire_radius = 5*10^-3;
+indSys = indpoly('Rectangle',width,ColumnHeight,connecting_wire_radius)
+indConnector = indpoly('RoundWire',width,connecting_wire_radius)/4
 %Transfer functiona and response time from notes
-rd = 1.2*sqrt(indHVCoax./cHV);
-Tconn = rd.*cHV
+rd_sys = 1.2*sqrt(indSys./cHV);
+rd_connector = 1.2*sqrt((indConnector.*4)./cHV);
+rtvs
+Ttotal = (rd_sys.*cHV)+(rd_connector.*cHV)
 % If Tconn is less than T from part a then system is good.
 % Change cable to one which gives a negative time response
 % therfore total time tresponse is shorter. See elements of

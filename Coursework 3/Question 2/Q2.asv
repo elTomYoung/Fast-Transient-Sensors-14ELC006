@@ -21,18 +21,18 @@ Rd = 10*10^-3;
 %% Current Discharge
 t = 0:1*10^-10:25*10^-6;
 [Current_Discharge, Diff_Current_Discharge, damping_string] = dcdisch(Vo,Lb,Cb,Rb,t);
-figure('name','RLC Current Discharge')
-plot(t.*10^6,Current_Discharge.*10^-3,'Linewidth',2)
-grid on
-xlabel('Time (\mus)')
-ylabel('Current (kA)')
-title(['Current Discharge for an ', damping_string ,' RLC Circuit'])
-figure('name','RLC Differential Current Discharge')
-plot(t.*10^6,Diff_Current_Discharge.*10^-9,'Linewidth',2)
-grid on
-xlabel('Time (\mus)')
-ylabel('Current/Time (GA/s)')
-title(['Differential Current Discharge for an ', damping_string ,' RLC Circuit'])
+% figure('name','RLC Current Discharge')
+% plot(t.*10^6,Current_Discharge.*10^-3,'Linewidth',2)
+% grid on
+% xlabel('Time (\mus)')
+% ylabel('Current (kA)')
+% title(['Current Discharge for an ', damping_string ,' RLC Circuit'])
+% figure('name','RLC Differential Current Discharge')
+% plot(t.*10^6,Diff_Current_Discharge.*10^-9,'Linewidth',2)
+% grid on
+% xlabel('Time (\mus)')
+% ylabel('Current/Time (GA/s)')
+% title(['Differential Current Discharge for an ', damping_string ,' RLC Circuit'])
 
 %% Probe Design
 %Coil Parameters
@@ -56,7 +56,7 @@ Induct_sum = Induct_sum0 + Induct_sum1 + Induct_sum2 + Induct_sum3;
 Induct_pre2 = (((pi*minor_radius)/p)+(log((2*p)/(wire_diameter)))-(5/4)-Induct_sum);
 RCoil_inductance = Induct_pre*Induct_pre2;
 %Resistance
-freq = 1/(2*sqrt(Lb*Cb));
+freq = 1/(2*pi*sqrt(Lb*Cb));
 RCoil1 = N/(pi*wire_diameter);
 RCoil2 = sqrt((copper_rho*pi*freq*u0)*((p^2)+((2*pi*minor_radius)^2)));
 RCoil_resistance = RCoil1*RCoil2;
@@ -65,38 +65,62 @@ RCoil_resistance = RCoil1*RCoil2;
 %Magnetic flux time rate-of-change
 k = u0.*N.*(major_radius-sqrt((major_radius^2)-(minor_radius^2)));
 flux = k.*Current_Discharge;
-figure('name','Magnetic Flux')
-plot(t.*10^6,flux.*10^6,'Linewidth',2)
-grid on
-xlabel('Time (\mus)')
-ylabel('Magneic Flux (\muT)')
-title(['Magnetic flux for an ', damping_string ,' RLC Circuit'])
-%Differential Magnetic Flux
+% figure('name','Magnetic Flux')
+% plot(t.*10^6,flux.*10^6,'Linewidth',2)
+% grid on
+% xlabel('Time (\mus)')
+% ylabel('Magneic Flux (\muT)')
+% title(['Magnetic flux for an ', damping_string ,' RLC Circuit'])
+% Differential Magnetic Flux
 dflux = k.*Diff_Current_Discharge;
-figure('name','Differntial Magnetic Flux')
-plot(t.*10^6,dflux,'Linewidth',2)
-grid on
-xlabel('Time (\mus)')
-ylabel('Differential Magneic Flux (T/s)')
-title(['Magnetic flux for an ', damping_string ,' RLC Circuit'])
+% figure('name','Differntial Magnetic Flux')
+% plot(t.*10^6,dflux,'Linewidth',2)
+% grid on
+% xlabel('Time (\mus)')
+% ylabel('Differential Magneic Flux (T/s)')
+% title(['Magnetic flux for an ', damping_string ,' RLC Circuit'])
 
 %% Rogowski Coil Current
 Rrt = RCoil_resistance + Rcvr;
 Lr = RCoil_inductance;
 omega = sqrt((1./(Lb.*Cb))-((Rb./(2.*Lb))^2));
-rogowski_current = @(x) exp((Rb./(2.*Lb)).*x).*(k.*(Vo./(omega.*Lb).*((omega.*exp(-1.*(Rb./(2.*Lb)).*x).*cos(omega.*x))+((-1.*(Rb./(2.*Lb))).*exp(-1.*(Rb./(2.*Lb)).*x).*sin(omega.*x)))));
+rogowski_current = @(x) exp((Rb./(2.*Lb)).*x).*(k.*(Vo./(omega.*Lb).*((omega.*exp(-1.*(Rb./(2.*Lb)).*x).*cos(omega.*x))-((Rb./(2.*Lb)).*exp(-1.*(Rb./(2.*Lb)).*x).*sin(omega.*x)))));
 RIntegral = integral(@(x)rogowski_current(x),0,70*10^-11);
 t2 = 0:1*10^-10:10*10^-9;
 Rogowski_Current = (exp(-(Rrt./Lr).*t2)./Lr).*RIntegral;
-dRogowski_Current_prefix = (exp(-(Rrt./Lr).*t2)./Lr).*exp((Rrt./Lr).*t2).*dflux(1:length(t2));
-dRogowski_Current = dRogowski_Current_prefix + (RIntegral.*((-Rrt./Lr).*exp(-(Rrt./Lr).*t2)./Lr));
+dRogowski_Current_prefix = (exp(-(Rrt./Lr).*t2)./Lr).*exp((Rrt./Lr).*t2).*(k.*(Vo./(omega.*Lb).*((omega.*exp(-1.*(Rb./(2.*Lb)).*t2).*cos(omega.*t2))-((Rb./(2.*Lb)).*exp(-1.*(Rb./(2.*Lb)).*t2).*sin(omega.*t2)))));
+dRogowski_Current = dRogowski_Current_prefix + (RIntegral.*((-Rrt.*exp((-Rrt./Lr).*t2))./(Lr^2)));
 figure('name','Rogowski Coil Voltage')
 hold on
-plot(t2.*10^9,Rogowski_Current.*Rrt,'b','Linewidth',2)
-plot(t2.*10^9,dRogowski_Current.*Lr,'r','Linewidth',2)
+plot(t2.*10^9,Rogowski_Current,'b','Linewidth',2)
+% plot(t2.*10^9,dRogowski_Current.*Lr,'r','Linewidth',2)
 grid on
 xlabel('Time (ns)')
 ylabel('V_{R} (V)')
 title('Rogowski Coil Voltage')
 legend('R_{R}I_{R}','L_{R}dI_{R}/dt')
 hold off
+
+% %% Input Voltage
+% %Differential Magnetic Flux
+% Vin = k.*Diff_Current_Discharge;
+% figure('name','Input Voltage')
+% plot(t.*10^6,Vin,'Linewidth',2)
+% grid on
+% xlabel('Time (\mus)')
+% ylabel('Voltage (V)')
+% title('Rogowski Coil Output Voltage')
+% %% Oscilloscope Voltage
+% % Integrator Design
+% Ri = 50*10^-3;
+% Ci = 450*10^-9;
+% tau = Ri.*Ci;
+% Vosc = (Rogowski_Current.*k)./tau;
+% figure('name','Rogowski Coil Voltage')
+% plot(t2.*10^9,Vosc,'b','Linewidth',2)
+% Voutp = max(Vosc);
+% grid on
+% xlabel('Time (ns)')
+% ylabel('Voltage (V)')
+% str = sprintf('Integrator Circuit Output Voltage with peak: %.1fV',Voutp);
+% title(str)

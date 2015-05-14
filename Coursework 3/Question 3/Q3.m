@@ -36,11 +36,11 @@ title(['Differential Current Discharge For ', damping_string ,' RLC Circuit'])
 
 %% Probe Design
 %Coil Parameters
-major_radius = 60*10^-3;
-minor_radius = 3*10^-3;
-wire_radius = 1*10^-3;
+major_radius = 50*10^-3;
+minor_radius = 5*10^-3;
+wire_radius = 2*10^-3;
 wire_diameter = 2*wire_radius;
-N = 10; %5-10 turns
+N = 20; %5-10 turns
 copper_rho = 1.7*10^-8;
 %Current Viewing Resistor
 Rcvr = 50; %Matches cable impedence
@@ -56,8 +56,8 @@ Induct_sum = Induct_sum0 + Induct_sum1 + Induct_sum2 + Induct_sum3;
 Induct_pre2 = (((pi*minor_radius)/p)+(log((2*p)/(wire_diameter)))-(5/4)-Induct_sum);
 RCoil_inductance = Induct_pre*Induct_pre2;
 %Resistance
-% freq = 1/(2*sqrt(Lb*Cb));
-freq = 1./(Rb.*Cb);
+freq = 1/(2*pi*sqrt(Lb*Cb));
+% freq = 1./(Rb.*Cb);
 RCoil1 = N/(pi*wire_diameter);
 RCoil2 = sqrt((copper_rho*pi*freq*u0)*((p^2)+((2*pi*minor_radius)^2)));
 RCoil_resistance = RCoil1*RCoil2;
@@ -87,33 +87,30 @@ Lr = RCoil_inductance;
 omegadot1 = (Rb./(2*Lb))^2;
 omegadot2 = 1./(Lb*Cb);
 omegadot = sqrt(omegadot1-omegadot2);
-rogowski_current = @(x) exp((Rb./(2.*Lb)).*x).*(k.*(Vo./(2.*omegadot.*Lb).*((exp(-1.*(Rb./(2.*Lb)).*x).*(omegadot.*exp(omegadot.*x)+omegadot.*exp(-omegadot.*x)))+(-1.*(Rb./(2.*Lb)).*exp(-1.*(Rb./(2.*Lb)).*x).*(exp(omegadot.*x)-exp(-omegadot.*x))))));
+rogowski_current = @(x) exp((Rrt./(2.*Lr)).*x).*(k.*(Vo./(2.*omegadot.*Lb).*((exp(-1.*(Rb./(2.*Lb)).*x).*(omegadot.*exp(omegadot.*x)+omegadot.*exp(-omegadot.*x)))+(-1.*(Rb./(2.*Lb)).*exp(-1.*(Rb./(2.*Lb)).*x).*(exp(omegadot.*x)-exp(-omegadot.*x))))));
 RIntegral = integral(@(x)rogowski_current(x),0,10*10^-9);
 t2 = 0:1*10^-12:10*10^-9;
 Rogowski_Current = (exp(-(Rrt./Lr).*t2)./Lr).*RIntegral;
-dRogowski_Current_prefix = (exp(-(Rrt./Lr).*t2)./Lr).*exp((Rrt./Lr).*t2).*dflux(1:length(t2));
+dRogowski_Current_prefix = (exp(-(Rrt./Lr).*t2)./Lr).*exp((Rrt./Lr).*t2).*(k.*(Vo./(2.*omegadot.*Lb).*((exp(-1.*(Rb./(2.*Lb)).*t2).*(omegadot.*exp(omegadot.*t2)+omegadot.*exp(-omegadot.*t2)))+(-1.*(Rb./(2.*Lb)).*exp(-1.*(Rb./(2.*Lb)).*t2).*(exp(omegadot.*t2)-exp(-omegadot.*t2))))));
 dRogowski_Current = dRogowski_Current_prefix + (RIntegral.*((-Rrt./Lr).*exp(-(Rrt./Lr).*t2)./Lr));
 figure('name','Rogowski Coil Voltage')
 hold on
 plot(t2.*10^9,Rogowski_Current.*Rrt,'b','Linewidth',2)
 plot(t2.*10^9,dRogowski_Current.*Lr,'r','Linewidth',2)
 grid on
-xlabel('t (ns)')
+xlabel('Time (ns)')
 ylabel('V_{R} (V)')
 title('Rogowski Coil Voltage')
 legend('R_{R}I_{R}','L_{R}dI_{R}/dt')
 hold off
 
 %% Oscilloscope Voltage
-Ri = 5;
-Ci = 20*10^-9;
-tau = Ri.*Ci;
-extau = 100*10^-9;
-prefix = 1./tau;
-% Vout = prefix.*integral(@(x)Rogowski_Current.*Rrt,0,100*10^-9);
-Vosc = 0;
+Vosc = (Rogowski_Current.*Rrt);
 figure('name','Rogowski Coil Voltage')
-hold on
 plot(t2.*10^9,Vosc,'b','Linewidth',2)
+Voutp = max(Vosc);
 grid on
-% Integrator Design
+xlabel('Time (ns)')
+ylabel('Voltage (V)')
+str = sprintf('Integrator Circuit Output Voltage with peak: %.1fV',Voutp);
+title(str)
