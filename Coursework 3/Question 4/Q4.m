@@ -57,12 +57,13 @@ indPr = indhelical(Nt,Pr_diameter./2,Pr_length)
 %Resistance
 freq = 1/(2*pi*sqrt(Lb*Cb));
 wire_diameter = round(dskin(copper_rho,freq).*10^4).*10^-4;
-%wire_diameter = 3*10^-3;
 p = Pr_length./Nt;
 rPr = rhelical(Pr_length,wire_diameter,p,copper_rho,Pr_diameter/2)
 %Capacitance
 cPr = ccoil(Pr_diameter/2,p,wire_diameter/2)./Nt
 %Demonstration
+Rt = 50+rPr
+Xl = (2.*pi.*freq).*indPr
 
 %% Calibration
 

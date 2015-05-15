@@ -21,3 +21,7 @@ For a wire radius of 12microm and a madrel radius of 5.00cm,
 404m of wire is required. This gives a total turns of 642.349551.
 Under the discharge from the Marx generator the temeprature
 increase in the wire is 79.64degrees
+
+High Voltage Arm Grading
+Using the grading method described in figure 3
+the capacitance is 16.00pF

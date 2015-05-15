@@ -43,7 +43,7 @@ wire_diameter = 2*wire_radius;
 N = 20; %5-10 turns
 copper_rho = 1.7*10^-8;
 %Current Viewing Resistor
-Rcvr = 50; %Matches cable impedence
+Rcvr = 20; %Matches cable impedence
 %Pitch
 p = (2.*pi.*major_radius)./N;
 %Inductance
@@ -87,9 +87,12 @@ Lr = RCoil_inductance;
 omegadot1 = (Rb./(2*Lb))^2;
 omegadot2 = 1./(Lb*Cb);
 omegadot = sqrt(omegadot1-omegadot2);
-rogowski_current = @(x) exp((Rrt./(2.*Lr)).*x).*(k.*(Vo./(2.*omegadot.*Lb).*((exp(-1.*(Rb./(2.*Lb)).*x).*(omegadot.*exp(omegadot.*x)+omegadot.*exp(-omegadot.*x)))+(-1.*(Rb./(2.*Lb)).*exp(-1.*(Rb./(2.*Lb)).*x).*(exp(omegadot.*x)-exp(-omegadot.*x))))));
-RIntegral = integral(@(x)rogowski_current(x),0,10*10^-9);
+rogowski_current = @(x) exp((Rrt./(Lr)).*x).*(k.*(Vo./(2.*omegadot.*Lb).*((exp(-1.*(Rb./(2.*Lb)).*x).*(omegadot.*exp(omegadot.*x)+omegadot.*exp(-omegadot.*x)))+(-1.*(Rb./(2.*Lb)).*exp(-1.*(Rb./(2.*Lb)).*x).*(exp(omegadot.*x)-exp(-omegadot.*x))))));
 t2 = 0:1*10^-12:10*10^-9;
+RIntegral = zeros(0,length(t2));
+for n = 1:length(t2)
+   RIntegral(n) = integral(@(x)rogowski_current(x),0,t2(n)); 
+end
 Rogowski_Current = (exp(-(Rrt./Lr).*t2)./Lr).*RIntegral;
 dRogowski_Current_prefix = (exp(-(Rrt./Lr).*t2)./Lr).*exp((Rrt./Lr).*t2).*(k.*(Vo./(2.*omegadot.*Lb).*((exp(-1.*(Rb./(2.*Lb)).*t2).*(omegadot.*exp(omegadot.*t2)+omegadot.*exp(-omegadot.*t2)))+(-1.*(Rb./(2.*Lb)).*exp(-1.*(Rb./(2.*Lb)).*t2).*(exp(omegadot.*t2)-exp(-omegadot.*t2))))));
 dRogowski_Current = dRogowski_Current_prefix + (RIntegral.*((-Rrt./Lr).*exp(-(Rrt./Lr).*t2)./Lr));

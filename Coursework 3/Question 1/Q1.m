@@ -82,7 +82,7 @@ wire_mass = wire_vol*evan_dens; %kg
 %Temperature
 deltaT = Q./(wire_mass.*evan_heat);
 % Capacitance was 16pF with graded column made of aluminium
-cHV = 16*10^-12;
+cHV = 16*10^-12
 %Connecting Cable
 %Chosen wire length of 2m
 width = 1;
@@ -100,26 +100,30 @@ Ttotal = (rd_sys.*cHV)+(rd_connector.*cHV)
 % voltage networks applied to transient sensors.
 
 %% Print to file
-% fileID = fopen('Q1.txt','w');
-% fprintf(fileID,'Load Voltage Characteristics\r\n');
-% fprintf(fileID,'Peak Voltage = %.2fkV\r\n',VMaxPeak);
-% fprintf(fileID,'Rise Time = %.2fns\r\n',rt.*10^9);
-% fprintf(fileID,'Bandwidth = %.2fMHz\r\n\r\n',fband./10^6);
-% fprintf(fileID,'Voltage Sensor\r\n');
-% fprintf(fileID,'For 2 percent accuracy, requires ratio of 5:1 giving;\r\n');
-% fprintf(fileID,'Rise Time = %.2fns\r\n',rtvs.*10^9);
-% fprintf(fileID,'Bandwidth = %.2fMHz\r\n\r\n',fbsens./10^6);
-% fprintf(fileID,'Low Voltage Arm\r\n');
-% fprintf(fileID,'Chosen design is a coaxial cable with;\r\n');
-% fprintf(fileID,'Z1 = 50, ');
-% fprintf(fileID,'Z2 = 50, ');
-% fprintf(fileID,'Z = 25\r\n');
-% fprintf(fileID,'T_{lv} = 0\r\n\r\n');
-% fprintf(fileID,'High Voltage Arm\r\n');
-% fprintf(fileID,'Using the attenuation factor with a z of %.2f Ohms gives\r\n a high voltage arm resistor value of %.0f kOhms\r\n',Zc,Zhv.*10^-3);
-% fprintf(fileID,'with a height of %.2fcm.\r\n',ColumnHeight.*10^2);
-% fprintf(fileID,'For a wire radius of %.0fmicrom and a madrel radius of %0.2fcm, \r\n',wire_radius.*10^6,rmandrel.*10^2);
-% fprintf(fileID,'%.0fm of wire is required. This gives a total turns of %0f.\r\n',twirelength,Nt);
-% fprintf(fileID,'Under the discharge from the Marx generator the temeprature\r\n');
-% fprintf(fileID,'increase in the wire is %.2fdegrees\r\n',deltaT);
-% fclose(fileID);
+fileID = fopen('Q1.txt','w');
+fprintf(fileID,'Load Voltage Characteristics\r\n');
+fprintf(fileID,'Peak Voltage = %.2fkV\r\n',VMaxPeak);
+fprintf(fileID,'Rise Time = %.2fns\r\n',rt.*10^9);
+fprintf(fileID,'Bandwidth = %.2fMHz\r\n\r\n',fband./10^6);
+fprintf(fileID,'Voltage Sensor\r\n');
+fprintf(fileID,'For 2 percent accuracy, requires ratio of 5:1 giving;\r\n');
+fprintf(fileID,'Rise Time = %.2fns\r\n',rtvs.*10^9);
+fprintf(fileID,'Bandwidth = %.2fMHz\r\n\r\n',fbsens./10^6);
+fprintf(fileID,'Low Voltage Arm\r\n');
+fprintf(fileID,'Chosen design is a coaxial cable with;\r\n');
+fprintf(fileID,'Z1 = 50, ');
+fprintf(fileID,'Z2 = 50, ');
+fprintf(fileID,'Z = 25\r\n');
+fprintf(fileID,'T_{lv} = 0\r\n\r\n');
+fprintf(fileID,'High Voltage Arm\r\n');
+fprintf(fileID,'Using the attenuation factor with a z of %.2f Ohms gives\r\n a high voltage arm resistor value of %.0f kOhms\r\n',Zc,Zhv.*10^-3);
+fprintf(fileID,'with a height of %.2fcm.\r\n',ColumnHeight.*10^2);
+fprintf(fileID,'For a wire radius of %.0fmicrom and a madrel radius of %0.2fcm, \r\n',wire_radius.*10^6,rmandrel.*10^2);
+fprintf(fileID,'%.0fm of wire is required. This gives a total turns of %0f.\r\n',twirelength,Nt);
+fprintf(fileID,'Under the discharge from the Marx generator the temeprature\r\n');
+fprintf(fileID,'increase in the wire is %.2fdegrees\r\n\r\n',deltaT);
+fprintf(fileID,'\r\n');
+fprintf(fileID,'Using the grading method described in figure 3\r\n');
+fprintf(fileID,'the capacitance is approximately %.0fpF\r\n',cHV.*10^12);
+fprintf(fileID,'\r\n');
+fclose(fileID);

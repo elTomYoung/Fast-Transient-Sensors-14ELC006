@@ -84,9 +84,12 @@ title(['Magnetic flux for an ', damping_string ,' RLC Circuit'])
 Rrt = RCoil_resistance + Rcvr;
 Lr = RCoil_inductance;
 omega = sqrt((1./(Lb.*Cb))-((Rb./(2.*Lb))^2));
-rogowski_current = @(x) exp((Rb./(2.*Lb)).*x).*(k.*(Vo./(omega.*Lb).*((omega.*exp(-1.*(Rb./(2.*Lb)).*x).*cos(omega.*x))-((Rb./(2.*Lb)).*exp(-1.*(Rb./(2.*Lb)).*x).*sin(omega.*x)))));
-RIntegral = integral(@(x)rogowski_current(x),0,70*10^-11);
+rogowski_current = @(x) exp((Rrt./Lr).*x).*(k.*(Vo./(omega.*Lb).*((omega.*exp(-1.*(Rb./(2.*Lb)).*x).*cos(omega.*x))-((Rb./(2.*Lb)).*exp(-1.*(Rb./(2.*Lb)).*x).*sin(omega.*x)))));
 t2 = 0:1*10^-10:10*10^-9;
+RIntegral = zeros(0,length(t2));
+for n=1:length(t2)
+    RIntegral(n) = integral(@(x)rogowski_current(x),0,t2(n));    
+end
 Rogowski_Current = (exp(-(Rrt./Lr).*t2)./Lr).*RIntegral;
 dRogowski_Current_prefix = (exp(-(Rrt./Lr).*t2)./Lr).*exp((Rrt./Lr).*t2).*(k.*(Vo./(omega.*Lb).*((omega.*exp(-1.*(Rb./(2.*Lb)).*t2).*cos(omega.*t2))-((Rb./(2.*Lb)).*exp(-1.*(Rb./(2.*Lb)).*t2).*sin(omega.*t2)))));
 dRogowski_Current = dRogowski_Current_prefix + (RIntegral.*((-Rrt.*exp((-Rrt./Lr).*t2))./(Lr^2)));
@@ -113,7 +116,7 @@ title('Rogowski Coil Output Voltage')
 %% Oscilloscope Voltage
 % Integrator Design
 Ri = 50*10^-3;
-Ci = 450*10^-9;
+Ci = 500*10^-9;
 tau = Ri.*Ci;
 Vosc = (Rogowski_Current.*k)./tau;
 figure('name','Rogowski Coil Voltage')
