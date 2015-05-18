@@ -36,14 +36,14 @@ title(['Differential Current Discharge for an ', damping_string ,' RLC Circuit']
 
 %% Probe Design
 %Coil Parameters
-major_radius = 20*10^-3;
-minor_radius = 2*10^-3;
-wire_radius = 1*10^-3;
+major_radius = 20*10^-3
+minor_radius = 2*10^-3
+wire_radius = 1*10^-3
 wire_diameter = 2*wire_radius;
-N = 10; %5-10 turns
+N = 10 %5-10 turns
 copper_rho = 1.7*10^-8;
 %Current Viewing Resistor
-Rcvr = 50; %Matches cable impedence
+Rcvr = 50 %matches cable impedence
 %Pitch
 p = (2.*pi.*major_radius)./N;
 %Inductance
@@ -54,12 +54,12 @@ Induct_sum2 = -0.0322*((log((2*pi*major_radius)/p))^2);
 Induct_sum3 = 0.00197*((log((2*pi*major_radius)/p))^3);
 Induct_sum = Induct_sum0 + Induct_sum1 + Induct_sum2 + Induct_sum3;
 Induct_pre2 = (((pi*minor_radius)/p)+(log((2*p)/(wire_diameter)))-(5/4)-Induct_sum);
-RCoil_inductance = Induct_pre*Induct_pre2;
+RCoil_inductance = Induct_pre*Induct_pre2
 %Resistance
 freq = 1/(2*pi*sqrt(Lb*Cb));
 RCoil1 = N/(pi*wire_diameter);
 RCoil2 = sqrt((copper_rho*pi*freq*u0)*((p^2)+((2*pi*minor_radius)^2)));
-RCoil_resistance = RCoil1*RCoil2;
+RCoil_resistance = RCoil1*RCoil2
 
 %% Magnetic flux
 %Magnetic flux time rate-of-change
@@ -94,6 +94,18 @@ Rogowski_Current = (exp(-(Rrt./Lr).*t2)./Lr).*RIntegral;
 dRogowski_Current_prefix = (exp(-(Rrt./Lr).*t2)./Lr).*exp((Rrt./Lr).*t2).*(k.*(Vo./(omega.*Lb).*((omega.*exp(-1.*(Rb./(2.*Lb)).*t2).*cos(omega.*t2))-((Rb./(2.*Lb)).*exp(-1.*(Rb./(2.*Lb)).*t2).*sin(omega.*t2)))));
 dRogowski_Current = dRogowski_Current_prefix + (RIntegral.*((-Rrt.*exp((-Rrt./Lr).*t2))./(Lr^2)));
 figure('name','Rogowski Coil Voltage')
+plot(t2.*10^9,Rogowski_Current,'b','Linewidth',2)
+grid on
+xlabel('Time (ns)')
+ylabel('I_{R} (A)')
+title('Rogowski Coil Current')
+figure('name','Differential Rogowski Coil Voltage')
+plot(t2.*10^9,dRogowski_Current.*10^-9,'b','Linewidth',2)
+grid on
+xlabel('Time (ns)')
+ylabel('dI_{R}/dt (GA/s)')
+title('Differential Rogowski Coil Current')
+figure('name','Rogowski Coil Characteristics')
 hold on
 plot(t2.*10^9,Rogowski_Current.*Rrt,'b','Linewidth',2)
 plot(t2.*10^9,dRogowski_Current.*Lr,'r','Linewidth',2)

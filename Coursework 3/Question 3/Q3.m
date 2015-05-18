@@ -36,14 +36,14 @@ title(['Differential Current Discharge For ', damping_string ,' RLC Circuit'])
 
 %% Probe Design
 %Coil Parameters
-major_radius = 50*10^-3;
-minor_radius = 5*10^-3;
-wire_radius = 2*10^-3;
+major_radius = 100*10^-3;
+minor_radius = 2.5*10^-3;
+wire_radius = 1.5*10^-3;
 wire_diameter = 2*wire_radius;
-N = 20; %5-10 turns
+N = 15; %5-10 turns
 copper_rho = 1.7*10^-8;
 %Current Viewing Resistor
-Rcvr = 20; %Matches cable impedence
+Rcvr = 5; %Matches cable impedence
 %Pitch
 p = (2.*pi.*major_radius)./N;
 %Inductance
@@ -56,7 +56,7 @@ Induct_sum = Induct_sum0 + Induct_sum1 + Induct_sum2 + Induct_sum3;
 Induct_pre2 = (((pi*minor_radius)/p)+(log((2*p)/(wire_diameter)))-(5/4)-Induct_sum);
 RCoil_inductance = Induct_pre*Induct_pre2;
 %Resistance
-freq = 1/(2*pi*sqrt(Lb*Cb));
+freq = 1/(Rb.*Cb);
 % freq = 1./(Rb.*Cb);
 RCoil1 = N/(pi*wire_diameter);
 RCoil2 = sqrt((copper_rho*pi*freq*u0)*((p^2)+((2*pi*minor_radius)^2)));
@@ -97,6 +97,18 @@ Rogowski_Current = (exp(-(Rrt./Lr).*t2)./Lr).*RIntegral;
 dRogowski_Current_prefix = (exp(-(Rrt./Lr).*t2)./Lr).*exp((Rrt./Lr).*t2).*(k.*(Vo./(2.*omegadot.*Lb).*((exp(-1.*(Rb./(2.*Lb)).*t2).*(omegadot.*exp(omegadot.*t2)+omegadot.*exp(-omegadot.*t2)))+(-1.*(Rb./(2.*Lb)).*exp(-1.*(Rb./(2.*Lb)).*t2).*(exp(omegadot.*t2)-exp(-omegadot.*t2))))));
 dRogowski_Current = dRogowski_Current_prefix + (RIntegral.*((-Rrt./Lr).*exp(-(Rrt./Lr).*t2)./Lr));
 figure('name','Rogowski Coil Voltage')
+plot(t2.*10^9,Rogowski_Current,'b','Linewidth',2)
+grid on
+xlabel('Time (ns)')
+ylabel('I_{R} (A)')
+title('Rogowski Coil Current')
+figure('name','Differential Rogowski Coil Voltage')
+plot(t2.*10^9,dRogowski_Current.*10^-9,'b','Linewidth',2)
+grid on
+xlabel('Time (ns)')
+ylabel('dI_{R}/dt (GA/s)')
+title('Differential Rogowski Coil Current')
+figure('name','Rogowski Coil Characteristics')
 hold on
 plot(t2.*10^9,Rogowski_Current.*Rrt,'b','Linewidth',2)
 plot(t2.*10^9,dRogowski_Current.*Lr,'r','Linewidth',2)

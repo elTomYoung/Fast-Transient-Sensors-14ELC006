@@ -62,11 +62,21 @@ rPr = rhelical(Pr_length,wire_diameter,p,copper_rho,Pr_diameter/2)
 %Capacitance
 cPr = ccoil(Pr_diameter/2,p,wire_diameter/2)./Nt
 %Demonstration
-Rt = 50+rPr
-Xl = (2.*pi.*freq).*indPr
-
+Rt = 50;
+Rsys = 50+rPr;
+Xl = (2.*pi.*freq).*indPr;
+if Xl < Rsys 
+    disp('Probe is differentiating')
+else
+    disp('Probe is self-integrating')
+end
+DCatten = Rt./(Rt+rPr);
+S = 0;
+Vout = DCatten.*(S.*dB);
 %% Calibration
 
+
+%% 
 
 
 

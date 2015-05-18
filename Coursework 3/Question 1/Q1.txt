@@ -22,6 +22,7 @@ For a wire radius of 12microm and a madrel radius of 5.00cm,
 Under the discharge from the Marx generator the temeprature
 increase in the wire is 79.64degrees
 
-High Voltage Arm Grading
+
 Using the grading method described in figure 3
-the capacitance is 16.00pF
+the capacitance is approximately 16pF
+

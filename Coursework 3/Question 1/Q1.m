@@ -55,7 +55,6 @@ Tlv = 0;
 Zhv = (((VMaxPeak*10^3)/80)*Zc)-Zc;
 %Resistive Column
 ColumnHeight = (VMaxPeak./5).*10^-2;
-%Wire radius from bandwidth requirement
 wire_radius = 12*10^-6;
 rmandrel = 0.05;
 wire_length = ((pi*(wire_radius)^2)*Zhv)/evan_rho;
@@ -80,20 +79,20 @@ Q = ((tmax*(max(VLoad)^2))/(2*Zhv));
 wire_vol = (pi*(wire_radius^2))*twirelength; %m^3
 wire_mass = wire_vol*evan_dens; %kg
 %Temperature
-deltaT = Q./(wire_mass.*evan_heat);
+deltaT = Q./(wire_mass.*evan_heat)
 % Capacitance was 16pF with graded column made of aluminium
-cHV = 16*10^-12
+cHV = 16*10^-12;
 %Connecting Cable
 %Chosen wire length of 2m
-width = 1;
+width = 0.8;
 connecting_wire_radius = 5*10^-3;
 indSys = indpoly('Rectangle',width,ColumnHeight,connecting_wire_radius)
 indConnector = indpoly('RoundWire',width,connecting_wire_radius)/4
 %Transfer functiona and response time from notes
 rd_sys = 1.2*sqrt(indSys./cHV);
-rd_connector = 1.2*sqrt((indConnector.*4)./cHV);
+rd_connector = 1.2*sqrt(indConnector./cHV);
+Ttotal = sqrt(((rd_sys.*cHV)+(rd_connector.*cHV))^2)
 rtvs
-Ttotal = (rd_sys.*cHV)+(rd_connector.*cHV)
 % If Tconn is less than T from part a then system is good.
 % Change cable to one which gives a negative time response
 % therfore total time tresponse is shorter. See elements of
