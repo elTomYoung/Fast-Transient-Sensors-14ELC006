@@ -127,5 +127,5 @@ Voutp = max(Vosc);
 grid on
 xlabel('Time (ns)')
 ylabel('Voltage (V)')
-str = sprintf('Integrator Circuit Output Voltage with peak: %.1fV',Voutp);
+str = sprintf('Output Voltage with peak: %.1fV',Voutp);
 title(str)

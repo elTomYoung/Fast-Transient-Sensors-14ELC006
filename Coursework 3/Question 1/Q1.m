@@ -55,11 +55,11 @@ Tlv = 0;
 Zhv = (((VMaxPeak*10^3)/80)*Zc)-Zc;
 %Resistive Column
 ColumnHeight = (VMaxPeak./5).*10^-2;
-wire_radius = 12*10^-6;
+wire_radius = 15*10^-6;
 rmandrel = 0.05;
 wire_length = ((pi*(wire_radius)^2)*Zhv)/evan_rho;
 wirel = wire_length*2;
-Nt = wirel./(pi.*rmandrel.*2);
+Nt = wirel./(pi.*rmandrel.*2)
 twirelength = wire_length*4;
 %Energy
 t=0:1*10^-10:300*10^-6;
